@@ -36,6 +36,7 @@ module Data.Aeson
     -- * Encoding and decoding
     -- $encoding_and_decoding
       decode
+    , decodeLenient
     , decode'
     , eitherDecode
     , eitherDecode'
@@ -84,7 +85,7 @@ module Data.Aeson
 import Data.Aeson.Encode (encode)
 import Data.Aeson.Parser.Internal (decodeWith, decodeStrictWith,
                                    eitherDecodeWith, eitherDecodeStrictWith,
-                                   jsonEOF, json, jsonEOF', json')
+                                   jsonEOF, jsonLenientEOF, json, jsonEOF', json')
 import Data.Aeson.Types
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Lazy as L
@@ -101,9 +102,19 @@ import qualified Data.ByteString.Lazy as L
 --
 -- This function parses immediately, but defers conversion.  See
 -- 'json' for details.
+--
+-- 'decode' only accepts top-level JSON values (object, array).  If
+-- you need to decode base types, use 'decodeLenient'.  (See RFC7159
+-- for discussion.)
 decode :: (FromJSON a) => L.ByteString -> Maybe a
 decode = decodeWith jsonEOF fromJSON
 {-# INLINE decode #-}
+
+-- | Like 'decode' but accepts any value (base types as well as
+-- top-level JSON values object, array).
+decodeLenient :: (FromJSON a) => L.ByteString -> Maybe a
+decodeLenient = decodeWith jsonLenientEOF fromJSON
+{-# INLINE decodeLenient #-}
 
 -- | Efficiently deserialize a JSON value from a strict 'B.ByteString'.
 -- If this fails due to incomplete or invalid input, 'Nothing' is

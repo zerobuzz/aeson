@@ -22,6 +22,7 @@ import Data.Time (ZonedTime(..))
 import Instances ()
 import Types
 import Encoders
+import Decoders
 import Properties.Deprecated (deprecatedTests)
 #ifdef GHC_GENERICS
 import Data.Int
@@ -116,6 +117,9 @@ tests = [
       testProperty "encodeDouble" encodeDouble
     , testProperty "encodeInteger" encodeInteger
     ],
+  testGroup "decode" [
+      testProperty "decodeLenient" decodeLenient
+  ],
   -- testGroup "camlCase" [
   --     testProperty "camlTo" $ roundTripCaml "AnApiMethod"
   --   , testProperty "camlTo" $ roundTripCaml "anotherMethodType"

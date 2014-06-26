@@ -15,7 +15,7 @@
 module Data.Aeson.Parser.Internal
     (
     -- * Lazy parsers
-      json, jsonEOF
+      json, jsonEOF, jsonLenientEOF
     , value
     , jstring
     -- * Strict parsers
@@ -315,6 +315,11 @@ eitherDecodeStrictWith p to s =
 -- end-of-input.  See also: 'json'.
 jsonEOF :: Parser Value
 jsonEOF = json <* skipSpace <* endOfInput
+
+-- | Parse any value (top-level of base type) followed by optional
+-- whitespace and end-of-input.  See also: 'json'.
+jsonLenientEOF :: Parser Value
+jsonLenientEOF = value <* skipSpace <* endOfInput
 
 -- | Parse a top-level JSON value followed by optional whitespace and
 -- end-of-input.  See also: 'json''.

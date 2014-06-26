@@ -124,6 +124,7 @@ test-suite tests
   main-is:        Properties.hs
   other-modules:
     Encoders
+    Decoders
     Functions
     Instances
     Options
