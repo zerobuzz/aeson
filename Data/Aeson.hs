@@ -110,6 +110,29 @@ decode :: (FromJSON a) => L.ByteString -> Maybe a
 decode = decodeWith jsonEOF fromJSON
 {-# INLINE decode #-}
 
+
+-- | Data type to be passed as argument to decode function family
+-- members in order to reduce the number of individual functions.
+--
+-- FIXME: Not used anywhere yet.
+data DecodeConfig =
+    DecodeConfig
+      { decodeConfigParseStrict    :: Bool
+      , decodeConfigConvertStrict  :: Bool
+      , decodeConfigLenient        :: Bool
+      }
+  deriving (Eq, Show)
+
+-- | The default settings for decode functions sell efficiency for
+-- clarity and robustness.
+defaultDecodeConfig =
+    DecodeConfig
+      { decodeConfigParseStrict    = True
+      , decodeConfigConvertStrict  = True
+      , decodeConfigLenient        = False
+      }
+
+
 -- | Like 'decode' but accepts any value (base types as well as
 -- top-level JSON values object, array).
 decodeLenient :: (FromJSON a) => L.ByteString -> Maybe a
